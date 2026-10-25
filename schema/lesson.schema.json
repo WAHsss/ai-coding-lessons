@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lesson front-matter",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "domain",
+    "tags",
+    "status",
+    "scope",
+    "applies_to",
+    "summary",
+    "first_seen",
+    "last_verified"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^GEN-[A-Z0-9]+-[0-9]{4}$",
+      "description": "全局唯一 ID，格式 GEN-<域代码>-<4 位序号>"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 4,
+      "description": "一句话标题，包含可检索的关键词"
+    },
+    "domain": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+(/[a-z0-9-]+)*$",
+      "description": "必须与 lessons/ 下的目录路径一致"
+    },
+    "tags": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "verified", "deprecated"]
+    },
+    "scope": {
+      "type": "string",
+      "const": "generic",
+      "description": "公共仓固定为 generic"
+    },
+    "applies_to": {
+      "type": "string",
+      "minLength": 1,
+      "description": "适用技术栈与版本范围"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 8,
+      "description": "一句话结论，用于索引检索"
+    },
+    "first_seen": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "last_verified": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "related": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^GEN-[A-Z0-9]+-[0-9]{4}$" }
+    }
+  }
+}

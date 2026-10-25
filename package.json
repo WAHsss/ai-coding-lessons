@@ -1,0 +1,15 @@
+{
+  "name": "ai-coding-lessons",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Reusable lessons for AI coding and software engineering",
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "index": "node scripts/build-index.mjs",
+    "check": "node scripts/validate.mjs && node scripts/build-index.mjs --check"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
