@@ -1,0 +1,35 @@
+# ai-coding-lessons MCP 服务
+# 用法（在 deploy/ 目录）：docker compose up -d --build
+# 网络：加入 yzy 现有 compose 网络，nginx 可直接用容器名反代，不占用宿主端口。
+#   网络名默认 deploy_yzy-net（yzy 的 deploy/ 目录作项目名）；
+#   若现场不同，用 YZY_NETWORK=<docker network ls 里实际的网桥名> 覆盖。
+name: ai-coding-lessons
+
+services:
+  mcp:
+    build:
+      context: ../server
+      dockerfile: Dockerfile
+    image: ai-coding-lessons-mcp:${IMAGE_TAG:-latest}
+    container_name: ai-coding-lessons-mcp
+    restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: "8321"
+      CONTENT_PATH: /app/dist/content.json
+      TZ: Asia/Shanghai
+    volumes:
+      # 内容由宿主 cron 重建，容器只读挂载 + mtime 热加载
+      - ../dist:/app/dist:ro
+    # 不发布端口：只通过 yzy-net 暴露给 nginx 容器
+    networks: [yzy-net]
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  yzy-net:
+    external: true
+    name: ${YZY_NETWORK:-deploy_yzy-net}

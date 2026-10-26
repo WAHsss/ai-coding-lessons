@@ -35,3 +35,5 @@ jobs:
         run: pnpm --dir server install --frozen-lockfile
       - name: Build and test server
         run: pnpm --dir server test
+      - name: Build docker image
+        run: docker build -t ai-coding-lessons-mcp:ci ./server
