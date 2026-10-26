@@ -18,24 +18,25 @@ DNSPod 给 `e-top.online` 加 A 记录：主机记录 `lessons`，记录值 `49.
 
 ### 2. 拉代码 + 建内容
 
+仓库属主是 `gh-runner`，**所有写仓库目录的操作都必须以 gh-runner 身份执行**（否则容器内 `mkdir /repo/dist` 会 EACCES）。
+
 ```bash
 sudo -u gh-runner -H git clone https://github.com/WAHsss/ai-coding-lessons.git /data/app/ai-coding-lessons
-cd /data/app/ai-coding-lessons
-docker run --rm --user "$(id -u):$(id -g)" -v "$PWD":/repo -w /repo \
-  --entrypoint node node:22-alpine scripts/build-content.mjs
+sudo -u gh-runner -H /data/app/ai-coding-lessons/deploy/update-content.sh --force
 ```
 
-### 3. 确认网络名并启动容器
+`--force` 表示「即使没有新提交也重建一次内容」，首次部署必用。
+
+### 3. 启动容器
 
 ```bash
-docker network ls | grep yzy     # 预期 deploy_yzy-net
 cd /data/app/ai-coding-lessons/deploy
-YZY_NETWORK=<上一步实际网络名> docker compose up -d --build
+sudo -u gh-runner -H docker compose up -d --build
 docker compose ps                # 状态应为 running/healthy
 docker compose logs -f mcp       # 预期输出 "ai-coding-lessons MCP（http）… 条经验"
 ```
 
-若网络名不是 `deploy_yzy-net`，把 `YZY_NETWORK=...` 写进 `deploy/.env`，后续命令无需再带。
+网络名已确认是 `deploy_yzy-net`，与 `docker-compose.yml` 默认值一致，无需改配置。
 
 ### 4. nginx 反代
 
@@ -84,19 +85,22 @@ curl -sS https://lessons.e-top.online/mcp \
 |---|---|
 | 看日志 | `cd /data/app/ai-coding-lessons/deploy && docker compose logs -f mcp` |
 | 立即更新内容 | `sudo -u gh-runner -H /data/app/ai-coding-lessons/deploy/update-content.sh` |
-| 手动重建镜像 | `docker compose build mcp && docker compose up -d mcp` |
-| 回滚到旧版本 | `git reset --hard <sha> && docker compose build mcp && docker compose up -d mcp` |
+| 强制重建内容（无新提交也重建） | `sudo -u gh-runner -H /data/app/ai-coding-lessons/deploy/update-content.sh --force` |
+| 手动重建镜像 | `sudo -u gh-runner -H docker compose -f /data/app/ai-coding-lessons/deploy/docker-compose.yml build mcp` |
+| 回滚到旧版本 | `sudo -u gh-runner -H git -C /data/app/ai-coding-lessons reset --hard <sha>`，再执行上一条并 `up -d mcp` |
 
 ## 红线
 
 - **MUST NOT** 给 mcp 容器发布宿主端口（`ports:`）——它只需在 yzy-net 内被 nginx 访问；发布到公网等于绕过 nginx。
 - **MUST NOT** 重签证书——通配符已覆盖。
-- **MUST NOT** 手动 `chown /data/app`——属主必须是 gh-runner；手动操作用 `sudo -u gh-runner -H`。
+- **MUST NOT** 手动 `chown /data/app`——属主必须是 gh-runner；一切写仓库目录的操作（clone/pull/建内容/compose build）都用 `sudo -u gh-runner -H`。
+- **MUST NOT** 以其他账号跑 `update-content.sh`——脚本按仓库属主 uid/gid 启动构建容器，身份不符会 EACCES。
 - 容器内 `HOST=0.0.0.0` 只作用于容器网络，不是公网暴露；改 `deploy/docker-compose.yml` 前先理解这点。
 
 ## 故障排查
 
-- 容器反复重启 / `healthz` 503 → `dist/content.json` 缺失：执行步骤 2 的构建命令。
-- `docker compose` 报 network not found → 网络名不是 `deploy_yzy-net`，见步骤 3。
-- 外网 502 但 `docker exec ... healthz` 正常 → nginx conf 未生效或容器不在 yzy-net：`docker network inspect <net> | grep ai-coding-lessons`。
+- `EACCES: permission denied, mkdir '/repo/dist'` → 不是以 gh-runner 跑的，见步骤 2 的身份要求。
+- 容器反复重启 / `healthz` 503 → `dist/content.json` 缺失：`update-content.sh --force`。
+- `docker compose` 报 network not found → 网络名不是 `deploy_yzy-net`，用 `YZY_NETWORK=...` 覆盖。
+- 外网 502 但 `docker exec ... healthz` 正常 → nginx conf 未生效或容器不在 yzy-net：`docker network inspect deploy_yzy-net | grep ai-coding-lessons`。
 - 内容没更新 → 看 `/tmp/ai-coding-lessons-update.log`。
