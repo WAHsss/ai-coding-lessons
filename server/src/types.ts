@@ -16,6 +16,10 @@ export interface LessonEntry {
   related: string[];
   path: string;
   body: string;
+  /** 条目来源：本地为 local，外部为 owner/repo */
+  source?: string;
+  /** 外部条目的原始链接，便于溯源与下架核对 */
+  source_url?: string;
 }
 
 export interface ContentSnapshot {
@@ -23,6 +27,8 @@ export interface ContentSnapshot {
   built_at: string;
   commit: string | null;
   count: number;
+  local_count?: number;
+  sources?: unknown[];
   lessons: LessonEntry[];
 }
 

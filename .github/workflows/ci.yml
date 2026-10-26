@@ -19,7 +19,7 @@ jobs:
       - name: Build content and verify shape
         run: |
           node scripts/build-content.mjs
-          node -e "const c=require('./dist/content.json');const i=require('./index.json');if(c.schema_version!==1||c.count!==i.count||c.lessons.length!==i.lessons.length){console.error('content.json 与 index.json 不一致');process.exit(1)}"
+          node -e "const c=require('./dist/content.json');const i=require('./index.json');if(c.schema_version!==1||c.local_count!==i.count){console.error('content.json 的本地条目与 index.json 不一致');process.exit(1)}"
 
   server:
     runs-on: ubuntu-latest

@@ -44,3 +44,31 @@
   - `get_content_version()` — 内容构建时间、commit、条目数
 - 默认只返回 `status: verified` 条目；`draft` / `deprecated` 需显式指定。
 - 内容更新：服务器 cron 每分钟 `git pull` 并重建 content.json，进程按 mtime 热加载，见 [deploy/README.md](./deploy/README.md)。
+
+## 6. 内容来源与贡献方式
+
+数据源为「本地条目 + 外部源指针」，两者合并进同一份 content.json。
+
+### 6.1 外部源（推荐，零搬运）
+
+贡献者**不需要把内容复制到本仓**，只需在自己的仓库维护 `lessons/**/*.md`，然后向
+`sources.json` 提一个只增一行的 PR：
+
+```json
+{
+  "schema_version": 1,
+  "sources": [
+    { "repo": "someone/their-lessons", "path": "lessons", "ref": "main" }
+  ]
+}
+```
+
+- 构建时由服务器拉取并合并，**本仓 git 历史中没有正文**，只有这行指针。
+- 源仓库需公开可读；作者删除、改私或删除条目后，下一次重建即下架（最长 15 分钟）。
+- 源条目必须通过本仓同一套 front-matter 与五段校验，否则该条被跳过，原因写进构建日志。
+- 单条命中脱敏规则时同样只跳过该条，不进入产物。
+- 外部条目的 `source` 为 `owner/repo`，`source_url` 指向源文件，便于溯源。
+
+### 6.2 本地托管（适合长文或需长期归档）
+
+仍可直接在本仓 `lessons/` 下新增条目走正常 PR；适用于需要本仓长期保留、或源仓库不便公开的内容。

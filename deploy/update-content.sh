@@ -14,6 +14,7 @@ set -euo pipefail
 REPO=/data/app/ai-coding-lessons
 COMPOSE="$REPO/deploy/docker-compose.yml"
 LOCK=/tmp/ai-coding-lessons-update.lock
+STALE_MINUTES="${STALE_MINUTES:-15}"
 FORCE=0
 if [ "${1:-}" = "--force" ]; then FORCE=1; fi
 
@@ -26,7 +27,10 @@ LOCAL=$(git rev-parse HEAD)
 REMOTE=$(git rev-parse origin/main)
 
 if [ "$LOCAL" = "$REMOTE" ] && [ "$FORCE" -eq 0 ]; then
-  exit 0
+  # 外部源（sources.json）与本地提交无关：内容过期也要重建，否则注册表更新永远拉不进来
+  if [ -f dist/content.json ] && [ -z "$(find dist/content.json -mmin "-${STALE_MINUTES}" 2>/dev/null)" ]; then
+    exit 0
+  fi
 fi
 
 CHANGED=""

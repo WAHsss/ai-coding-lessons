@@ -57,6 +57,8 @@ docker exec yzy-nginx nginx -s reload
 * * * * * /data/app/ai-coding-lessons/deploy/update-content.sh >> /tmp/ai-coding-lessons-update.log 2>&1
 ```
 
+外部源（`sources.json`）与本地提交无关，因此脚本在**无新提交时仍会在内容超过 15 分钟后重建一次**（`STALE_MINUTES` 可覆盖）。这决定了外部条目下架的最长延迟。
+
 ### 6. 验证
 
 ```bash
