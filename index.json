@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "count": 33,
+  "count": 41,
   "lessons": [
     {
       "id": "GEN-AI-0001",
@@ -582,6 +582,24 @@
       "path": "lessons/testing/real-device-automation-evidence.md"
     },
     {
+      "id": "GEN-TEST-0003",
+      "title": "全量 Jest 先被沙箱拦临时文件、再并行 OOM，用 --runInBand + 4GB 堆",
+      "domain": "testing",
+      "tags": [
+        "jest",
+        "sandbox",
+        "oom",
+        "runinband",
+        "windows"
+      ],
+      "status": "verified",
+      "applies_to": "Jest 全量测试；受限沙箱或内存受限机器",
+      "summary": "沙箱拦 worker 临时文件、沙箱外并行 OOM，单进程串行 + 4GB 堆一次通过。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/testing/jest-sandbox-temp-and-oom.md"
+    },
+    {
       "id": "GEN-TOOL-0001",
       "title": "PowerShell 执行策略禁用导致 pnpm/npx 无法运行，改用 .cmd 入口",
       "domain": "tooling",
@@ -597,6 +615,132 @@
       "first_seen": "2026-10-18",
       "last_verified": "2026-10-26",
       "path": "lessons/tooling/powershell-execution-policy-disabled.md"
+    },
+    {
+      "id": "GEN-TOOL-0002",
+      "title": "adb server 被回收导致 reverse 隧道失效，启动与采集必须放同一条命令",
+      "domain": "tooling",
+      "tags": [
+        "adb",
+        "reverse",
+        "sandbox",
+        "tunnel",
+        "android"
+      ],
+      "status": "verified",
+      "applies_to": "受限沙箱 / 容器环境中的 adb 真机调试",
+      "summary": "反向隧道是 adb server 会话级映射，进程被回收即失效，隧道与启动要同一条命令完成。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/tooling/adb-reverse-tunnel-recycled.md"
+    },
+    {
+      "id": "GEN-TOOL-0003",
+      "title": "非交互终端启动 dev server 崩溃：process.stdin.setRawMode 不存在",
+      "domain": "tooling",
+      "tags": [
+        "node",
+        "tty",
+        "stdin",
+        "dev-server",
+        "ci"
+      ],
+      "status": "verified",
+      "applies_to": "Node.js CLI 在非 TTY（后台/CI/Agent）环境运行",
+      "summary": "非 TTY 下 setRawMode 不存在，注入 shim 补齐即可，不要改工具源码。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/tooling/stdin-setrawmode-not-tty.md"
+    },
+    {
+      "id": "GEN-TOOL-0004",
+      "title": "沙箱 shell 里 PATH 与环境变量「凭空消失」，命令要显式前缀",
+      "domain": "tooling",
+      "tags": [
+        "sandbox",
+        "path",
+        "environment",
+        "powershell",
+        "node"
+      ],
+      "status": "verified",
+      "applies_to": "受限执行沙箱中的 shell 命令；Windows PowerShell",
+      "summary": "沙箱新 shell 不一定继承用户 PATH，命令用显式前缀或绝对路径，不要因此重装环境。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/tooling/sandbox-path-env-lost.md"
+    },
+    {
+      "id": "GEN-TOOL-0005",
+      "title": "工具的默认目录落在受限盘（HOME/TEMP），需重定向到可写盘",
+      "domain": "tooling",
+      "tags": [
+        "sandbox",
+        "temp",
+        "home",
+        "cache",
+        "junction",
+        "windows"
+      ],
+      "status": "verified",
+      "applies_to": "Windows 受限沙箱；默认写 ~ 或 %TEMP% 的 CLI 工具",
+      "summary": "配置写用户目录、缓存写临时目录的工具在受限环境会 EPERM，需 Junction 或环境变量重定向。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/tooling/default-dirs-on-restricted-drive.md"
+    },
+    {
+      "id": "GEN-TOOL-0006",
+      "title": "PowerShell 脚本的 6 个高频陷阱：自动变量、别名冲突、时间比较、扩展名",
+      "domain": "tooling",
+      "tags": [
+        "powershell",
+        "scripting",
+        "windows",
+        "pitfalls"
+      ],
+      "status": "verified",
+      "applies_to": "Windows PowerShell 5.x / 7.x 脚本与自动化",
+      "summary": "$pid 只读、单字母函数撞别名、LastWriteTime 毫秒比较、node 不认 .bundle、日志被占用、CLIXML 噪声。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/tooling/powershell-script-pitfalls.md"
+    },
+    {
+      "id": "GEN-TOOL-0008",
+      "title": "磁盘迁移后 venv 失效：改 pyvenv.cfg 的 home 即可，不必重建",
+      "domain": "tooling",
+      "tags": [
+        "python",
+        "venv",
+        "pyvenv.cfg",
+        "migration",
+        "windows"
+      ],
+      "status": "verified",
+      "applies_to": "Python 3.x venv（Windows / POSIX）；目录或磁盘迁移后",
+      "summary": "venv 启动器按 pyvenv.cfg 的 home 找基础解释器，迁移后改这一行胜过重建。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/tooling/venv-pyvenv-home-after-migration.md"
+    },
+    {
+      "id": "GEN-TOOL-0009",
+      "title": "受限环境非 watch 构建报 spawn ENOMEM，属于环境限制而非代码问题",
+      "domain": "tooling",
+      "tags": [
+        "sandbox",
+        "enomem",
+        "esbuild",
+        "build",
+        "taro"
+      ],
+      "status": "verified",
+      "applies_to": "受限沙箱 / 容器中的前端构建（esbuild 等会 fork 子进程的工具）",
+      "summary": "spawn ENOMEM 是子进程或内存受限导致，改用 dev server 产物取证，不要反复重试。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/tooling/sandbox-spawn-enomem.md"
     }
   ]
 }
