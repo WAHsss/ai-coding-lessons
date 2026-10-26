@@ -31,12 +31,16 @@
 
 禁止：推测性结论、未验证的偏方、纯项目业务规则。
 
-## 5. 未来 Server 契约（预留）
+## 5. MCP Server 契约
 
-数据源统一为 `index.json` + 条目文件，后续 MCP/HTTP Server 不改变内容 schema：
+数据源为 `dist/content.json`（`scripts/build-content.mjs` 由 Git 内容生成），服务端只读，经验维护仍以 Git 为准。
 
-- `search_lessons({ query, domain, tags, status, limit })`
-- `get_lesson({ id })`
-- `list_domains()`
-
-服务端只做检索与读取，经验维护仍以 Git 为准。
+- 公开端点：`https://lessons.e-top.online/mcp`（Streamable HTTP，无状态，仅 POST）
+- 本地 stdio：`cd server && pnpm install && pnpm build && node dist/src/index.js`
+- 工具：
+  - `search_lessons({ query?, domain?, tags?, status?, limit? })` — 返回元数据列表
+  - `get_lesson({ id })` — 返回单条全文（含正文五段）
+  - `list_domains({ status? })` / `list_tags({ status?, domain? })` — 域/标签计数
+  - `get_content_version()` — 内容构建时间、commit、条目数
+- 默认只返回 `status: verified` 条目；`draft` / `deprecated` 需显式指定。
+- 内容更新：服务器 cron 每分钟 `git pull` 并重建 content.json，进程按 mtime 热加载，见 [deploy/README.md](./deploy/README.md)。

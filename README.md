@@ -59,6 +59,14 @@
 node -e "const i=require('./index.json');console.log(i.lessons.filter(l=>l.tags.includes('metro')))"
 ```
 
+### MCP Server
+
+Agent 可通过 MCP 直接检索（契约见 [AGENTS.md](./AGENTS.md) 第 5 节）：
+
+- 公开端点：`https://lessons.e-top.online/mcp`
+- 本地运行：`cd server && pnpm install && pnpm build && node dist/src/index.js`（stdio；`--http` 走 HTTP）
+- 工具：`search_lessons` / `get_lesson` / `list_domains` / `list_tags` / `get_content_version`，默认只返回 `verified` 条目。
+
 ## 本地校验
 
 零依赖，Node 18+：

@@ -1,0 +1,23 @@
+# /etc/systemd/system/ai-coding-lessons-mcp.service
+# 安装：sudo cp deploy/systemd/ai-coding-lessons-mcp.service /etc/systemd/system/ && sudo systemctl daemon-reload
+# 注意：ExecStart 的 node 路径用 `which node` 核实（若用 nvm 安装需写绝对路径）。
+[Unit]
+Description=ai-coding-lessons MCP server (read-only)
+After=network-online.target
+
+[Service]
+Type=simple
+User=gh-runner
+Group=gh-runner
+WorkingDirectory=/data/app/ai-coding-lessons
+Environment=HOST=127.0.0.1
+Environment=PORT=8321
+Environment=CONTENT_PATH=/data/app/ai-coding-lessons/dist/content.json
+ExecStart=/usr/bin/node server/dist/src/index.js --http
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
