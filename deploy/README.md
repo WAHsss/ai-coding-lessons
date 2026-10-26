@@ -100,6 +100,7 @@ curl -sS https://lessons.e-top.online/mcp \
 ## 故障排查
 
 - `EACCES: permission denied, mkdir '/repo/dist'` → 不是以 gh-runner 跑的，见步骤 2 的身份要求。
+- `Cannot find module '/app/dist/src/index.js'` → 内容挂载覆盖了编译产物：内容必须挂到 `/app/content`，不能挂 `/app/dist`。
 - 容器反复重启 / `healthz` 503 → `dist/content.json` 缺失：`update-content.sh --force`。
 - `docker compose` 报 network not found → 网络名不是 `deploy_yzy-net`，用 `YZY_NETWORK=...` 覆盖。
 - 外网 502 但 `docker exec ... healthz` 正常 → nginx conf 未生效或容器不在 yzy-net：`docker network inspect deploy_yzy-net | grep ai-coding-lessons`。

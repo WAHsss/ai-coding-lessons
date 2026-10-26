@@ -15,7 +15,7 @@ WORKDIR /app
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
     PORT=8321 \
-    CONTENT_PATH=/app/dist/content.json
+    CONTENT_PATH=/app/content/content.json
 RUN corepack enable
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --prod --frozen-lockfile && pnpm store prune

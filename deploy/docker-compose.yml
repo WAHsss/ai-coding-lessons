@@ -16,11 +16,12 @@ services:
     environment:
       HOST: 0.0.0.0
       PORT: "8321"
-      CONTENT_PATH: /app/dist/content.json
+      CONTENT_PATH: /app/content/content.json
       TZ: Asia/Shanghai
     volumes:
       # 内容由宿主 cron 重建，容器只读挂载 + mtime 热加载
-      - ../dist:/app/dist:ro
+      # 注意：不能挂到 /app/dist——那是编译产物目录，挂载会覆盖掉 dist/src/index.js
+      - ../dist:/app/content:ro
     # 不发布端口：只通过 yzy-net 暴露给 nginx 容器
     networks: [yzy-net]
     logging:
