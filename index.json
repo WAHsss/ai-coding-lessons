@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "count": 27,
+  "count": 33,
   "lessons": [
     {
       "id": "GEN-AI-0001",
@@ -38,6 +38,24 @@
       "path": "lessons/build/wrapper-exit-code-false-success.md"
     },
     {
+      "id": "GEN-BUILD-0002",
+      "title": "metro transformer.globalPrefix 必须是合法 JS 标识符，否则 bundle 语法非法",
+      "domain": "build",
+      "tags": [
+        "metro",
+        "globalPrefix",
+        "prelude",
+        "syntax",
+        "bundle"
+      ],
+      "status": "verified",
+      "applies_to": "React Native 0.7x + metro；自定义 transformer.globalPrefix 的项目",
+      "summary": "globalPrefix 会被原样拼进 prelude 与模块包装，只能用字母数字下划线美元符。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/build/metro-global-prefix-must-be-identifier.md"
+    },
+    {
       "id": "GEN-BUILD-0003",
       "title": "metro transform 缓存键不含 defineConstants：切环境后静默复用旧 bundle",
       "domain": "build",
@@ -56,6 +74,42 @@
       "path": "lessons/build/metro-transform-cache-key-excludes-define-constants.md"
     },
     {
+      "id": "GEN-BUILD-0004",
+      "title": "子进程 argv 里没有 --type rn，按 argv 推断的构建类型会退化",
+      "domain": "build",
+      "tags": [
+        "taro",
+        "build-type",
+        "argv",
+        "config",
+        "rn"
+      ],
+      "status": "verified",
+      "applies_to": "Taro 3.x 构建配置；spawn 子进程重新加载配置的构建链",
+      "summary": "被 spawn 的子进程会重新加载配置但 argv 不含 --type，按 argv 门控的配置要改成无条件求值。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/build/spawn-child-loses-build-type.md"
+    },
+    {
+      "id": "GEN-BUILD-0005",
+      "title": "配置顶层硬校验污染其他环境，环境配置要懒加载",
+      "domain": "build",
+      "tags": [
+        "config",
+        "env",
+        "lazy-load",
+        "validation",
+        "taro"
+      ],
+      "status": "verified",
+      "applies_to": "Taro 3.x / 多环境构建配置",
+      "summary": "环境配置用静态 import 会让别的环境也被求值并触发校验，改为按环境懒加载。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/build/env-config-lazy-load.md"
+    },
+    {
       "id": "GEN-BUILD-0006",
       "title": "运行中的 metro 不拾取新增文件/新增目录，HTTP 200 不等于产物是新的",
       "domain": "build",
@@ -72,6 +126,60 @@
       "first_seen": "2026-10-18",
       "last_verified": "2026-10-26",
       "path": "lessons/build/metro-does-not-pick-up-new-files.md"
+    },
+    {
+      "id": "GEN-BUILD-0007",
+      "title": "webpack 的 ?raw 查询串在 metro 下无法解析，用空桩模块接管",
+      "domain": "build",
+      "tags": [
+        "metro",
+        "webpack",
+        "raw-loader",
+        "resolver",
+        "stub"
+      ],
+      "status": "verified",
+      "applies_to": "React Native 0.7x metro；从 Web 工程复用的代码",
+      "summary": "xxx?raw 是 webpack 语法，metro 会把查询串当模块名解析，需在 resolveRequest 里映射为桩。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/build/metro-raw-query-stub.md"
+    },
+    {
+      "id": "GEN-BUILD-0008",
+      "title": "冷构建与首次 bundle 下发长达数分钟，先预热再启动真机",
+      "domain": "build",
+      "tags": [
+        "rn",
+        "metro",
+        "cold-build",
+        "prewarm",
+        "timeout"
+      ],
+      "status": "verified",
+      "applies_to": "React Native 0.7x metro dev server；首次构建 / 冷缓存场景",
+      "summary": "冷构建耗时以分钟计，先用 PC 侧请求预热 bundle，再把长任务当后台任务处理。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/build/cold-build-prewarm.md"
+    },
+    {
+      "id": "GEN-BUILD-0009",
+      "title": "Gradle composite includeBuild 需要三处声明镜像，只改一处仍会连 Google",
+      "domain": "build",
+      "tags": [
+        "gradle",
+        "maven",
+        "mirror",
+        "composite",
+        "android"
+      ],
+      "status": "verified",
+      "applies_to": "Android Gradle 构建；受限网络环境；含 includeBuild 的 RN 工程",
+      "summary": "镜像要同时落在 init.gradle、settings.pluginManagement 与 allprojects，缺一处就失败。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/build/gradle-composite-mirrors.md"
     },
     {
       "id": "GEN-DEPLOY-0001",
