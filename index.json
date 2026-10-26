@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "count": 41,
+  "count": 50,
   "lessons": [
     {
       "id": "GEN-AI-0001",
@@ -199,6 +199,150 @@
       "first_seen": "2026-10-18",
       "last_verified": "2026-10-26",
       "path": "lessons/deploy/security-group-blocks-443.md"
+    },
+    {
+      "id": "GEN-DEPLOY-0002",
+      "title": "服务器本机 curl 访问 HTTPS 失败，先排除机器级代理",
+      "domain": "deploy",
+      "tags": [
+        "curl",
+        "proxy",
+        "https",
+        "ssl",
+        "troubleshooting"
+      ],
+      "status": "verified",
+      "applies_to": "Linux 服务器自检；配置了全局 HTTP(S)_PROXY 的主机",
+      "summary": "本机代理会拦截回环请求并破坏证书校验，用 --noproxy 隔离验证。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/deploy/local-proxy-breaks-selfcheck.md"
+    },
+    {
+      "id": "GEN-DEPLOY-0003",
+      "title": "git pull 报属主不匹配：用仓库属主身份拉取，不要 chown",
+      "domain": "deploy",
+      "tags": [
+        "git",
+        "ownership",
+        "runner",
+        "ci",
+        "permissions"
+      ],
+      "status": "verified",
+      "applies_to": "Linux 服务器上由其他用户部署的仓库；CI runner 与仓库属主不同",
+      "summary": "拉取命令以仓库属主身份执行即可；改属主会让后续部署链路权限更乱。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/deploy/git-pull-owner-mismatch.md"
+    },
+    {
+      "id": "GEN-DEPLOY-0004",
+      "title": "acme.sh 安装脚本下载速度为 0，换镜像源而不是反复重试",
+      "domain": "deploy",
+      "tags": [
+        "acme",
+        "certificate",
+        "mirror",
+        "network",
+        "install"
+      ],
+      "status": "verified",
+      "applies_to": "受限网络环境下安装 acme.sh；境外资源拉取",
+      "summary": "官方下载源被阻断时表现为 0 字节/超时，改用镜像源或包管理器分发。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/deploy/acme-install-zero-speed.md"
+    },
+    {
+      "id": "GEN-DEPLOY-0005",
+      "title": "服务器拉 GitHub 间歇性 TLS 中断，需重试加替代通道",
+      "domain": "deploy",
+      "tags": [
+        "github",
+        "git",
+        "tls",
+        "network",
+        "retry"
+      ],
+      "status": "verified",
+      "applies_to": "境外 Git 托管服务；网络质量波动的服务器",
+      "summary": "同一命令时而成功时而 TLS 中断，属链路质量问题，用重试与 443 通道兜底。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/deploy/github-tls-intermittent.md"
+    },
+    {
+      "id": "GEN-DEPLOY-0006",
+      "title": "静态站点打包混入非站点文件，用排除清单并固定入口",
+      "domain": "deploy",
+      "tags": [
+        "static-site",
+        "packaging",
+        "nginx",
+        "build",
+        "deploy"
+      ],
+      "status": "verified",
+      "applies_to": "纯静态站点发布；从含源码的目录直接打包上传",
+      "summary": "打包必须用显式排除清单并固定入口 index.html，发布后核对首页 200。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/deploy/static-site-packaging.md"
+    },
+    {
+      "id": "GEN-DEPLOY-0007",
+      "title": "裸 IP 访问返回 444 是 default server 的设计行为，不是故障",
+      "domain": "deploy",
+      "tags": [
+        "nginx",
+        "default-server",
+        "444",
+        "security",
+        "vhost"
+      ],
+      "status": "verified",
+      "applies_to": "多域名 Nginx 站点；按 Host 头分发的配置",
+      "summary": "444 由兜底 server 主动断连产生，属预期行为；验证必须带正确 Host 头。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/deploy/bare-ip-returns-444.md"
+    },
+    {
+      "id": "GEN-H5-0001",
+      "title": "全局样式覆写会击穿隐藏类，全局规则只补页面未声明的属性",
+      "domain": "frontend/h5",
+      "tags": [
+        "h5",
+        "css",
+        "specificity",
+        "hidden",
+        "ui-library"
+      ],
+      "status": "verified",
+      "applies_to": "H5 + UI 组件库；全局样式覆写",
+      "summary": "库用隐藏类实现显隐，全局规则的高特异性覆盖会把它顶穿，需限定作用域。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/h5/global-override-breaks-hidden.md"
+    },
+    {
+      "id": "GEN-H5-0002",
+      "title": "输入框对齐要拆成宿主层与内层两段，内边距只放一层",
+      "domain": "frontend/h5",
+      "tags": [
+        "h5",
+        "input",
+        "alignment",
+        "padding",
+        "box-model"
+      ],
+      "status": "verified",
+      "applies_to": "H5 自定义输入框；带图标的搜索框/表单行",
+      "summary": "宿主容器负责高度与垂直居中，内层 input 负责文字基线，padding 只加在其中一层。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/h5/input-alignment-two-layer.md"
     },
     {
       "id": "GEN-RN-0001",
@@ -705,6 +849,24 @@
       "first_seen": "2026-10-18",
       "last_verified": "2026-10-26",
       "path": "lessons/tooling/powershell-script-pitfalls.md"
+    },
+    {
+      "id": "GEN-TOOL-0007",
+      "title": "Android SDK 下载被 TLS 中断，且目录名不等于 API 级别",
+      "domain": "tooling",
+      "tags": [
+        "android",
+        "sdkmanager",
+        "tls",
+        "mirror",
+        "api-level"
+      ],
+      "status": "verified",
+      "applies_to": "Android SDK 命令行安装；受限网络环境",
+      "summary": "sdkmanager 走 Google 源会 TLS 中断需换镜像；平台目录名是代号，要按 API 号安装。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/tooling/android-sdk-tls-and-api-level.md"
     },
     {
       "id": "GEN-TOOL-0008",
