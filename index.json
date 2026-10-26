@@ -1,5 +1,222 @@
 {
   "schema_version": 1,
-  "count": 0,
-  "lessons": []
+  "count": 12,
+  "lessons": [
+    {
+      "id": "GEN-AI-0001",
+      "title": "Agent 输出语言一致性：人读中文，技术标识保留英文",
+      "domain": "ai-coding",
+      "tags": [
+        "output",
+        "language",
+        "convention",
+        "agent"
+      ],
+      "status": "verified",
+      "applies_to": "任意 Agent 协作场景",
+      "summary": "把「哪类内容用中文、哪类保留英文原文」写成可判定清单，避免同段回复中英混排。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/ai-coding/output-language-consistency.md"
+    },
+    {
+      "id": "GEN-BUILD-0001",
+      "title": "构建退出码 0 不代表成功：包装器只 spawn 不检查子进程",
+      "domain": "build",
+      "tags": [
+        "build",
+        "exit-code",
+        "wrapper",
+        "artifact",
+        "bundle"
+      ],
+      "status": "verified",
+      "applies_to": "Taro RN 构建链；任何 spawn 子进程后立即返回的构建包装器",
+      "summary": "包装器不检查子进程退出码时退出码恒为 0，验收必须落到产物 mtime/尺寸/语法校验。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/build/wrapper-exit-code-false-success.md"
+    },
+    {
+      "id": "GEN-BUILD-0003",
+      "title": "metro transform 缓存键不含 defineConstants：切环境后静默复用旧 bundle",
+      "domain": "build",
+      "tags": [
+        "metro",
+        "cache",
+        "babel",
+        "defineConstants",
+        "environment"
+      ],
+      "status": "verified",
+      "applies_to": "React Native 0.7x + metro；babel-plugin-global-define 一类编译期常量注入",
+      "summary": "编译期常量不参与 transform 缓存键，切环境前必须隔离缓存（独立 globalPrefix）或显式清缓存。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/build/metro-transform-cache-key-excludes-define-constants.md"
+    },
+    {
+      "id": "GEN-BUILD-0006",
+      "title": "运行中的 metro 不拾取新增文件/新增目录，HTTP 200 不等于产物是新的",
+      "domain": "build",
+      "tags": [
+        "metro",
+        "watch",
+        "dev-server",
+        "bundle",
+        "verification"
+      ],
+      "status": "verified",
+      "applies_to": "React Native 0.7x + metro dev server；Taro RN watch 模式",
+      "summary": "改完代码不重启 dev server 就拉包会拿到旧产物，验收必须 grep 本次新增符号。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/build/metro-does-not-pick-up-new-files.md"
+    },
+    {
+      "id": "GEN-DEPLOY-0001",
+      "title": "外网访问不通但本机 127.0.0.1 正常：先查云防火墙/安全组",
+      "domain": "deploy",
+      "tags": [
+        "deploy",
+        "firewall",
+        "security-group",
+        "https",
+        "tls",
+        "troubleshooting"
+      ],
+      "status": "verified",
+      "applies_to": "云服务器（腾讯云/阿里云等）+ Nginx + HTTPS",
+      "summary": "域名或 IP 访问不通、本机回环却 200 时，先查云控制台安全组是否放通 443，别先改 Nginx。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/deploy/security-group-blocks-443.md"
+    },
+    {
+      "id": "GEN-RN-0001",
+      "title": "Hermes 不保留函数源码：Function.prototype.toString 识别实现恒为 false",
+      "domain": "frontend/rn",
+      "tags": [
+        "hermes",
+        "runtime",
+        "polyfill",
+        "function-tostring",
+        "probe"
+      ],
+      "status": "verified",
+      "applies_to": "React Native 0.7x + Hermes 引擎",
+      "summary": "任何靠函数源码特征识别实现/桩的判定在 Hermes 上恒为 false，改用运行时探针。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/hermes-drops-function-source.md"
+    },
+    {
+      "id": "GEN-RN-0002",
+      "title": "RN 绝对定位弹层被祖先裁剪，z-index 无效",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "layout",
+        "absolute",
+        "clipping",
+        "z-index",
+        "popup"
+      ],
+      "status": "verified",
+      "applies_to": "React Native 0.7x（Yoga 布局）",
+      "summary": "绝对定位的弹出层无法逃逸祖先视图边界，z-index 只管同级，改文档流展开或独立层级。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/absolute-popup-clipped-by-ancestor.md"
+    },
+    {
+      "id": "GEN-RN-0003",
+      "title": "RN 的 Text 不继承父 View 的 color，选中色必须写在 Text 自身",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "text",
+        "style",
+        "color",
+        "inherit"
+      ],
+      "status": "verified",
+      "applies_to": "React Native 0.7x；Taro RN 跨端样式",
+      "summary": "颜色/字重写在容器 View 上只有 H5 和小程序生效，RN 必须写在 Text 自身的 class 上。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/text-does-not-inherit-color.md"
+    },
+    {
+      "id": "GEN-RN-0004",
+      "title": "position: fixed 在 RN（Yoga）中是无效值，全屏浮层要用 Modal 或根级容器",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "yoga",
+        "position-fixed",
+        "modal",
+        "overlay"
+      ],
+      "status": "verified",
+      "applies_to": "React Native 0.7x（Yoga）；Taro RN 页面",
+      "summary": "RN 只支持 absolute/relative，fixed 会被原样编译进 bundle 后被原生侧忽略，全屏浮层改用 Modal。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/position-fixed-ignored-in-yoga.md"
+    },
+    {
+      "id": "GEN-RN-0005",
+      "title": "同步存储桩只做内存实现会导致冷启动丢态",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "storage",
+        "persistence",
+        "cold-start",
+        "taro-compat"
+      ],
+      "status": "draft",
+      "applies_to": "Taro RN（taro-rn 存储 API 为「暂不支持」错误桩时）",
+      "summary": "用内存实现顶替同步存储会丢登录态，需内存+落盘+启动回灌+就绪屏障四件套，尚未落地验证。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/sync-storage-stub-persistence.md"
+    },
+    {
+      "id": "GEN-TEST-0001",
+      "title": "真机自动化验收取证：坐标每步现取、语义树判定、输入逐字符",
+      "domain": "testing",
+      "tags": [
+        "adb",
+        "uiautomator",
+        "real-device",
+        "verification",
+        "automation"
+      ],
+      "status": "verified",
+      "applies_to": "Android 真机 + adb + uiautomator；RN / 混合应用的自动化验收",
+      "summary": "真机验收不要用静态坐标、截图体积和整串输入，改用实时 bounds、UI 语义树与逐字符输入。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/testing/real-device-automation-evidence.md"
+    },
+    {
+      "id": "GEN-TOOL-0001",
+      "title": "PowerShell 执行策略禁用导致 pnpm/npx 无法运行，改用 .cmd 入口",
+      "domain": "tooling",
+      "tags": [
+        "powershell",
+        "execution-policy",
+        "pnpm",
+        "windows"
+      ],
+      "status": "verified",
+      "applies_to": "Windows PowerShell 5.x；pnpm / npm / npx 的 .ps1 包装脚本",
+      "summary": "看到 cannot be loaded because running scripts is disabled 时换 .cmd 入口，不要改机器策略。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/tooling/powershell-execution-policy-disabled.md"
+    }
+  ]
 }
