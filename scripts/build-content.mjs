@@ -9,6 +9,8 @@ import { loadLessons, validateLesson, checkUniqueIds } from './lib/lessons.mjs';
 const OUTPUT_FILE = path.resolve('dist/content.json');
 
 function currentCommit() {
+  // 容器内构建时镜像没有 git，由调用方通过 GIT_COMMIT 传入
+  if (process.env.GIT_COMMIT) return process.env.GIT_COMMIT.trim();
   try {
     return execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
   } catch {

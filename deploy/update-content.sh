@@ -41,6 +41,7 @@ OWNER_GID=$(stat -c '%g' "$REPO")
 
 docker run --rm \
   --user "${OWNER_UID}:${OWNER_GID}" \
+  -e GIT_COMMIT="$(git rev-parse HEAD)" \
   -v "$REPO":/repo -w /repo \
   --entrypoint node node:22-alpine scripts/build-content.mjs
 
