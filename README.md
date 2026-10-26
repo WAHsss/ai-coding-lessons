@@ -67,6 +67,35 @@ Agent 可通过 MCP 直接检索（契约见 [AGENTS.md](./AGENTS.md) 第 5 节�
 - 本地运行：`cd server && pnpm install && pnpm build && node dist/src/index.js`（stdio；`--http` 走 HTTP）
 - 工具：`search_lessons` / `get_lesson` / `list_domains` / `list_tags` / `get_content_version`，默认只返回 `verified` 条目。
 
+## 本地使用（stdio）
+
+```bash
+pnpm --dir server install
+pnpm --dir server build
+```
+
+MCP 客户端配置（各 harness 结构相同）：
+
+```json
+{
+  "mcpServers": {
+    "ai-coding-lessons": {
+      "command": "node",
+      "args": ["<本仓路径>/server/bin/mcp-local.mjs", "--stdio"],
+      "env": { "CONTENT_PATH": "<本仓路径>/dist/content.json" }
+    }
+  }
+}
+```
+
+| Harness | 配置文件 |
+|---|---|
+| Claude Code | `<项目根>/.mcp.json` |
+| Trae / WorkBuddy | `<项目根>/.trae/mcp.json` |
+| Codex | `~/.codex/config.toml` 的 `[mcp_servers.ai-coding-lessons]` |
+
+启动器 `server/bin/mcp-local.mjs` 会在 `lessons/` 比 `content.json` 新时自动重建内容；构建输出走 stderr，不污染 stdout 的 JSON-RPC 通道。内容过期或缺失时无需手动干预。
+
 ## 本地校验
 
 零依赖，Node 18+：
