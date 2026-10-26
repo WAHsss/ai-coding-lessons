@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "count": 20,
+  "count": 27,
   "lessons": [
     {
       "id": "GEN-AI-0001",
@@ -311,6 +311,78 @@
       "path": "lessons/frontend/rn/tab-panel-unmount-remount.md"
     },
     {
+      "id": "GEN-RN-0013",
+      "title": "Picker 在 RN 端点不开：触发依赖唯一子节点的 onPress，Taro View 不认",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "picker",
+        "antd",
+        "onPress",
+        "trigger"
+      ],
+      "status": "verified",
+      "applies_to": "Taro RN 的 Picker（@ant-design/react-native 实现）",
+      "summary": "Picker 把弹出挂到唯一子节点的 onPress 上，子节点是 Taro View 时永不触发，需显式映射手势。",
+      "first_seen": "2026-10-19",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/picker-trigger-onpress.md"
+    },
+    {
+      "id": "GEN-RN-0014",
+      "title": "CSS 变量在 RN 端不生效，需在编译期注入或内联为字面量",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "css-variables",
+        "theme",
+        "postcss",
+        "compile"
+      ],
+      "status": "verified",
+      "applies_to": "Taro RN 样式管线；以 CSS 自定义属性实现的主题体系",
+      "summary": "RN 无自定义属性，跨文件引用的变量会被替换成 undefined，需编译期注入 token 或内联。",
+      "first_seen": "2026-10-19",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/css-variables-not-supported.md"
+    },
+    {
+      "id": "GEN-RN-0015",
+      "title": "RN 多行 TextInput 文字不居中：用 textAlignVertical，flex 居中无效",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "textinput",
+        "textarea",
+        "textAlignVertical",
+        "layout"
+      ],
+      "status": "verified",
+      "applies_to": "React Native Android；Taro Textarea 的 RN 实现",
+      "summary": "组件整体位置靠 flex，文字在输入框内的位置靠 textAlignVertical: center。",
+      "first_seen": "2026-10-19",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/multiline-input-vertical-align.md"
+    },
+    {
+      "id": "GEN-RN-0016",
+      "title": "页面级下拉刷新 hook 写在内嵌组件里永远不会触发",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "pull-to-refresh",
+        "page",
+        "scrollview",
+        "lifecycle"
+      ],
+      "status": "verified",
+      "applies_to": "Taro 3.x 跨端；usePullDownRefresh 与 ScrollView refresher",
+      "summary": "usePullDownRefresh 只对注册页面生效，内嵌列表要用容器原生下拉（RN 用 RefreshControl）。",
+      "first_seen": "2026-10-19",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/pull-down-refresh-not-page.md"
+    },
+    {
       "id": "GEN-RN-0017",
       "title": "RN 流式响应不能照搬 Web Stream，需用原生 XHR 增量事件",
       "domain": "frontend/rn",
@@ -327,6 +399,61 @@
       "first_seen": "2026-10-19",
       "last_verified": "2026-10-26",
       "path": "lessons/frontend/rn/sse-via-xhr-incremental.md"
+    },
+    {
+      "id": "GEN-RN-0018",
+      "title": "dev 期 Maximum update depth exceeded 是渲染器计数，不等于真实死循环",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "react",
+        "logbox",
+        "useeffect",
+        "streaming",
+        "dev-only"
+      ],
+      "status": "verified",
+      "applies_to": "React Native 0.7x dev 产物（ReactNativeRenderer-dev）",
+      "summary": "该警告由被动 effect 内连续调度更新触发，只在 dev 存在，优先把更新延后到微任务。",
+      "first_seen": "2026-10-22",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/maximum-update-depth-dev-only.md"
+    },
+    {
+      "id": "GEN-RN-0020",
+      "title": "Web 专有样式键被透传给 RN，触发 Invalid props.style 警告",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "style",
+        "c2rn",
+        "warning",
+        "compat"
+      ],
+      "status": "verified",
+      "applies_to": "Taro RN 样式管线；复用 Web SCSS 的跨端项目",
+      "summary": "box-sizing/white-space/text-overflow 等 Web 键会原样透传成 RN 属性，需在编译期剔除。",
+      "first_seen": "2026-10-21",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/web-only-style-keys-leak.md"
+    },
+    {
+      "id": "GEN-RN-0021",
+      "title": "bundle 语法错误的取证方法：Compiling JS failed 与 has not been registered 必须合看",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "bundle",
+        "syntax",
+        "logcat",
+        "diagnosis"
+      ],
+      "status": "verified",
+      "applies_to": "React Native Android；metro 产物排查",
+      "summary": "白屏时先找 Compiling JS failed 的行列号，再把 bundle 拉到 PC 用 node --check 定位。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/bundle-syntax-error-evidence.md"
     },
     {
       "id": "GEN-TEST-0001",
