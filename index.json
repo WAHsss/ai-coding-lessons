@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "count": 12,
+  "count": 20,
   "lessons": [
     {
       "id": "GEN-AI-0001",
@@ -182,6 +182,151 @@
       "first_seen": "2026-10-18",
       "last_verified": "2026-10-26",
       "path": "lessons/frontend/rn/sync-storage-stub-persistence.md"
+    },
+    {
+      "id": "GEN-RN-0006",
+      "title": "RN 样式管线只认 c2rn 子集：flex 简写、rpx、calc、CSS 变量都会中断编译",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "scss",
+        "css-to-react-native",
+        "style",
+        "compile"
+      ],
+      "status": "verified",
+      "applies_to": "Taro RN 样式管线（taro-css-to-react-native / postcss-pxtransform）",
+      "summary": "跨端 SCSS 只能落在 c2rn 子集内，flex 简写、rpx、calc 残留与 CSS 变量需在构建期归一。",
+      "first_seen": "2026-10-19",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/rn-style-subset-c2rn.md"
+    },
+    {
+      "id": "GEN-RN-0007",
+      "title": "子组件未 import 自己的 scss 时 className 解析为 undefined，元素零样式",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "taro",
+        "scss",
+        "stylesheet",
+        "module-scope"
+      ],
+      "status": "verified",
+      "applies_to": "Taro 3.x 编译到 RN；按模块注入 _styleSheet 的实现",
+      "summary": "Taro RN 类名解析是模块级的，子组件必须各自 import 自己的 scss，否则样式静默失效。",
+      "first_seen": "2026-10-19",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/subcomponent-missing-scss-import.md"
+    },
+    {
+      "id": "GEN-RN-0008",
+      "title": "RN 事件对象没有 stopPropagation，裸调用直接红屏",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "event",
+        "stopPropagation",
+        "cross-platform"
+      ],
+      "status": "verified",
+      "applies_to": "Taro RN 合成事件；从 H5 迁移的事件处理代码",
+      "summary": "RN 按压事件不冒泡且事件对象无 stopPropagation，改用存在性守卫统一处理。",
+      "first_seen": "2026-10-19",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/event-object-lacks-stop-propagation.md"
+    },
+    {
+      "id": "GEN-RN-0009",
+      "title": "Hermes 缺 atob/btoa，依赖库在模块加载期调用会让入口注册失败",
+      "domain": "frontend/rn",
+      "tags": [
+        "hermes",
+        "polyfill",
+        "atob",
+        "startup",
+        "globals"
+      ],
+      "status": "verified",
+      "applies_to": "React Native 0.7x + Hermes；依赖浏览器全局 API 的第三方库",
+      "summary": "Hermes 无 atob/btoa，需在入口第一条 import 的零 import 模块里安装全局。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/hermes-missing-atob-btoa.md"
+    },
+    {
+      "id": "GEN-RN-0010",
+      "title": "debug 包默认连 metro 而不是内置 bundle，装到真机白屏",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "android",
+        "debug",
+        "bundle",
+        "metro",
+        "apk"
+      ],
+      "status": "verified",
+      "applies_to": "React Native 0.7x Android 壳工程；debuggableVariants 配置",
+      "summary": "debug 包优先连 8081 取 bundle，内置 bundle 存在也不用；独立测试包需关掉 developer support。",
+      "first_seen": "2026-10-18",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/debug-apk-requires-metro.md"
+    },
+    {
+      "id": "GEN-RN-0011",
+      "title": "RN 点击判定有 350ms/3px 阈值，慢按会丢失点击，静止控件改用 onTouchEnd",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "touch",
+        "click",
+        "gesture",
+        "taro"
+      ],
+      "status": "verified",
+      "applies_to": "Taro RN（@tarojs/components-rn useClickable / PanResponder）",
+      "summary": "按压超过 350ms 或位移超过 3px 就不算点击，静止控件在 RN 端改用 onTouchEnd。",
+      "first_seen": "2026-10-19",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/click-threshold-350ms.md"
+    },
+    {
+      "id": "GEN-RN-0012",
+      "title": "条件渲染切换 tab 会卸载重挂，每次闪「加载中」并丢失滚动位置",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "tab",
+        "unmount",
+        "state",
+        "scroll",
+        "performance"
+      ],
+      "status": "verified",
+      "applies_to": "React / RN / Taro 的 tab 面板切换",
+      "summary": "用条件渲染切换面板会重建组件，改为访问后常驻 + display:none 隐藏。",
+      "first_seen": "2026-10-19",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/tab-panel-unmount-remount.md"
+    },
+    {
+      "id": "GEN-RN-0017",
+      "title": "RN 流式响应不能照搬 Web Stream，需用原生 XHR 增量事件",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "sse",
+        "streaming",
+        "xhr",
+        "fetch"
+      ],
+      "status": "verified",
+      "applies_to": "React Native 0.7x；SSE / 流式文本渲染",
+      "summary": "RN 的 fetch 不暴露 ReadableStream，改监听 XHR progress 取增量，并只替换传输层。",
+      "first_seen": "2026-10-19",
+      "last_verified": "2026-10-26",
+      "path": "lessons/frontend/rn/sse-via-xhr-incremental.md"
     },
     {
       "id": "GEN-TEST-0001",
