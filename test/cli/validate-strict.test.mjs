@@ -105,3 +105,14 @@ test('正文出现疑似密钥 → warning', () => {
   const warnings = collectStrictWarnings([lesson({ body })]);
   assert.ok(warnings.some((item) => item.rule === '敏感信息'));
 });
+
+test('真邮箱命中敏感信息，包名+版本不命中', () => {
+  const emailBody = goodBody.replace('## 教训', '## 教训\n\n联系作者：alice@example.com。\n');
+  assert.ok(collectStrictWarnings([lesson({ body: emailBody })]).some((item) => item.rule === '敏感信息'));
+
+  const versionBody = goodBody.replace('## 教训', '## 教训\n\n锁定 react@19.0.0，避免被间接依赖升级带飞。\n');
+  assert.equal(
+    collectStrictWarnings([lesson({ body: versionBody })]).filter((item) => item.rule === '敏感信息').length,
+    0,
+  );
+});

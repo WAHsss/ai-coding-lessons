@@ -42,7 +42,8 @@ const EVIDENCE_SIGNALS = [
 ];
 
 const WEAK_SENSITIVE = [
-  { name: '邮箱', re: /[\w.+-]+@[\w-]+\.[\w.]+/ },
+  // TLD 必须含字母，排除 `react@19.0.0` 这类包名+版本
+  { name: '邮箱', re: /[\w.+-]+@(?:[\w-]+\.)+[a-zA-Z]{2,}/ },
   { name: 'Bearer 令牌', re: /Bearer\s+[A-Za-z0-9._-]{8,}/i },
   // 值必须是 12 位以上的不透明串，避免命中 `Unexpected token: punc` 这类报错原文
   { name: '密钥赋值', re: /(?:password|passwd|token|secret|api[_-]?key)\s*[=:]\s*["']?[A-Za-z0-9_\-./+=]{12,}/i },
