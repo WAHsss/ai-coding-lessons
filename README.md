@@ -59,6 +59,45 @@
 node -e "const i=require('./index.json');console.log(i.lessons.filter(l=>l.tags.includes('metro')))"
 ```
 
+## CLI（零依赖）
+
+`lessons` 是仓库自带 CLI，只用 Node 内置模块（Node ≥18），不需要安装任何依赖：
+
+```bash
+npx github:WAHsss/ai-coding-lessons --help
+# 或在克隆后的仓库根
+node bin/lessons.mjs --help
+```
+
+| 命令 | 作用 |
+|---|---|
+| `init [dir]` | 创建 `lessons/` 骨架与 README |
+| `new --domain <d> --title <t> [--tags a,b] [--status draft]` | 按模板生成条目并分配 ID |
+| `validate [--strict]` | 硬校验；`--strict` 追加 8 条质量提示 |
+| `search <query> [--domain] [--tags] [--status] [--limit] [--json]` | 本地全文检索，权重与 MCP 服务一致 |
+| `build [--index-only \| --content-only] [--check]` | 生成 `index.json` / `dist/content.json` |
+| `serve [--http] [--port <n>] [--print-config]` | 启动 MCP，或打印可直接粘贴的 `mcp.json` |
+| `publish [--repo <owner/name>]` | 输出 `sources.json` 注册片段与 PR 链接 |
+| `check` | `validate` + `build --check`，等价 `npm run check` |
+
+全局选项：`--root <path>`（默认从 cwd 向上查找含 `lessons/` 的目录）、`--json`、`--no-color`。
+stdout 只放机读结果（`--json`、`--print-config`），诊断信息一律走 stderr。
+
+两条使用路径（未全局安装时把 `lessons` 换成 `node bin/lessons.mjs`）：
+
+```bash
+# 自托管：本地建库 → 写条目 → 校验 → 拿到 MCP 配置
+lessons init my-lessons
+lessons new --domain build --title "一句话标题" --tags metro,cache
+# 补齐「现象 / 根因 / 处置 / 证据 / 教训」后再跑 strict
+lessons validate --strict
+lessons serve --print-config
+
+# 公共贡献：校验通过后生成注册片段
+lessons validate --strict
+lessons publish --repo <owner/name>
+```
+
 ### MCP Server
 
 Agent 可通过 MCP 直接检索（契约见 [AGENTS.md](./AGENTS.md) 第 5 节）：

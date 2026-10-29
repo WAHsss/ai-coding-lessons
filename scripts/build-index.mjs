@@ -1,58 +1,36 @@
-import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import {
-  loadLessons,
-  validateLesson,
-  checkUniqueIds,
-  buildIndex,
-  serializeIndex,
-} from './lib/lessons.mjs';
+import { checkIndexFresh, writeIndexJson, LessonValidationError } from './lib/build.mjs';
 
-const INDEX_FILE = path.resolve('index.json');
+// 薄封装：解析 cwd 作为项目根，实际逻辑在 scripts/lib/build.mjs。
+// CLI（bin/lessons.mjs）走同一份实现，保证产物字节一致。
+
+const ROOT = path.resolve('.');
 const checkOnly = process.argv.includes('--check');
 
 async function main() {
-  let lessons;
   try {
-    lessons = await loadLessons();
+    if (checkOnly) {
+      const { fresh, expected } = await checkIndexFresh(ROOT);
+      if (!fresh) {
+        console.error('index.json 已过期，请执行 node scripts/build-index.mjs 后提交。');
+        process.exit(1);
+      }
+      const count = JSON.parse(expected).count;
+      console.log(`索引检查通过：${count} 条经验。`);
+      return;
+    }
+
+    const index = await writeIndexJson(ROOT);
+    console.log(`已生成 index.json：${index.count} 条经验。`);
   } catch (error) {
+    if (error instanceof LessonValidationError) {
+      console.error(`索引生成失败，请先修复 ${error.errors.length} 个问题：`);
+      for (const message of error.errors) console.error(`- ${message}`);
+      process.exit(1);
+    }
     console.error(`索引生成失败：${error.message}`);
     process.exit(1);
   }
-
-  const errors = [];
-  for (const lesson of lessons) {
-    for (const message of validateLesson(lesson)) {
-      errors.push(`${lesson.file}: ${message}`);
-    }
-  }
-  errors.push(...checkUniqueIds(lessons));
-
-  if (errors.length > 0) {
-    console.error(`索引生成失败，请先修复 ${errors.length} 个问题：`);
-    for (const message of errors) console.error(`- ${message}`);
-    process.exit(1);
-  }
-
-  const output = serializeIndex(buildIndex(lessons));
-
-  if (checkOnly) {
-    let current = '';
-    try {
-      current = await readFile(INDEX_FILE, 'utf8');
-    } catch {
-      current = '';
-    }
-    if (current !== output) {
-      console.error('index.json 已过期，请执行 node scripts/build-index.mjs 后提交。');
-      process.exit(1);
-    }
-    console.log(`索引检查通过：${lessons.length} 条经验。`);
-    return;
-  }
-
-  await writeFile(INDEX_FILE, output, 'utf8');
-  console.log(`已生成 index.json：${lessons.length} 条经验。`);
 }
 
 main();

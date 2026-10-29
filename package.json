@@ -4,11 +4,15 @@
   "private": true,
   "type": "module",
   "description": "Reusable lessons for AI coding and software engineering",
+  "bin": {
+    "lessons": "bin/lessons.mjs"
+  },
   "scripts": {
     "validate": "node scripts/validate.mjs",
     "index": "node scripts/build-index.mjs",
     "content": "node scripts/build-content.mjs",
-    "check": "node scripts/validate.mjs && node scripts/build-index.mjs --check"
+    "check": "node scripts/validate.mjs && node scripts/build-index.mjs --check",
+    "test:cli": "node --test \"test/cli/*.test.mjs\""
   },
   "engines": {
     "node": ">=18"

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "count": 50,
+  "count": 51,
   "lessons": [
     {
       "id": "GEN-AI-0001",
@@ -706,6 +706,25 @@
       "first_seen": "2026-10-18",
       "last_verified": "2026-10-26",
       "path": "lessons/frontend/rn/bundle-syntax-error-evidence.md"
+    },
+    {
+      "id": "GEN-RN-0022",
+      "title": "RN StyleSheet 只认独立单类选择器，属性 / 复合多类 / 后代选择器全静默丢弃",
+      "domain": "frontend/rn",
+      "tags": [
+        "rn",
+        "stylesheet",
+        "selector",
+        "c2rn",
+        "yoga",
+        "css-to-react-native"
+      ],
+      "status": "verified",
+      "applies_to": "React Native Yoga StyleSheet；Taro RN / 任何用 css-to-react-native 的跨端样式管线",
+      "summary": "RN StyleSheet 仅接受 `.class-name` 单类选择器，[disabled] 属性选择器、.a.b 复合多类、.a .b 后代选择器均被静默丢弃，导致禁用态等样式在 RN 端不生效。",
+      "first_seen": "2026-10-29",
+      "last_verified": "2026-10-29",
+      "path": "lessons/frontend/rn/stylesheet-selector-limits.md"
     },
     {
       "id": "GEN-TEST-0001",

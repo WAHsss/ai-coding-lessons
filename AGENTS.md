@@ -68,6 +68,8 @@
 - 源条目必须通过本仓同一套 front-matter 与五段校验，否则该条被跳过，原因写进构建日志。
 - 单条命中脱敏规则时同样只跳过该条，不进入产物。
 - 外部条目的 `source` 为 `owner/repo`，`source_url` 指向源文件，便于溯源。
+- 用 `lessons publish --repo <owner/name>` 生成上面这段注册片段与 PR 链接（内部先跑
+  `validate --strict`，不通过则拒绝输出），无需手工拼 JSON。
 
 ### 6.2 本地托管（适合长文或需长期归档）
 

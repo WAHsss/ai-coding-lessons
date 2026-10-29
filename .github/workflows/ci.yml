@@ -20,6 +20,8 @@ jobs:
         run: |
           node scripts/build-content.mjs
           node -e "const c=require('./dist/content.json');const i=require('./index.json');if(c.schema_version!==1||c.local_count!==i.count){console.error('content.json 的本地条目与 index.json 不一致');process.exit(1)}"
+      - name: CLI tests
+        run: npm run test:cli
 
   server:
     runs-on: ubuntu-latest
