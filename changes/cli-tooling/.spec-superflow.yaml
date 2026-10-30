@@ -2,10 +2,10 @@
 # Progress and legacy approvals. Recover missing evidence; never infer approval from artifact existence.
 
 # === Core state ===
-state: executing
+state: closing
 workflow: full
 workflow_variant: planned
-completion_outcome: null
+completion_outcome: verified
 completion_reason: null
 revision: null
 
@@ -18,7 +18,7 @@ execution_mode: null
 execution_plan_hash: null
 execution_plan_revision: null
 batches_completed: 0
-test_result: null
+test_result: pass: npm run check
 spec_merged: false
 spec_publication_receipt: null
 
@@ -28,7 +28,7 @@ target_branch: main
 
 # === Metadata ===
 change_name: cli-tooling
-last_transition: 2026-10-29T10:28:09.807Z
+last_transition: 2026-10-29T10:42:40.681Z
 last_transition_from: null
 last_transition_to: null
 
