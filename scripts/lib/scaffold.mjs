@@ -10,6 +10,7 @@ const DOMAIN_CODES = {
   tooling: 'TOOL',
   build: 'BUILD',
   deploy: 'DEPLOY',
+  backend: 'BACKEND',
 };
 
 /** 域 → ID 域代码。未列出的域取路径末段大写（frontend/rn → RN）。 */

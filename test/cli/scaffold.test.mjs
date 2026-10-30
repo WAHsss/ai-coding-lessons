@@ -11,6 +11,7 @@ test('域代码映射', () => {
   assert.equal(domainCode('testing'), 'TEST');
   assert.equal(domainCode('tooling'), 'TOOL');
   assert.equal(domainCode('build'), 'BUILD');
+  assert.equal(domainCode('backend'), 'BACKEND');
   assert.equal(domainCode('frontend/rn'), 'RN');
   assert.equal(domainCode('frontend/h5'), 'H5');
 });

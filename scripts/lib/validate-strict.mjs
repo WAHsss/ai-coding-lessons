@@ -8,6 +8,7 @@ export const KNOWN_DOMAINS = [
   'frontend/h5',
   'build',
   'deploy',
+  'backend',
   'testing',
   'tooling',
   'ai-coding',
